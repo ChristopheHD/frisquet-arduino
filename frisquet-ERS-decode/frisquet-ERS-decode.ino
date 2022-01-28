@@ -1,12 +1,15 @@
-#define PIN_RF_TX_VCC               15                                          // +5 volt / Vcc power to the transmitter on this pin
-#define PIN_RF_TX_DATA              14                                          // Data to the 433Mhz transmitter on this pin
-#define PIN_RF_RX_VCC               16                                          // Power to the receiver on this pin
-#define PIN_RF_RX_DATA              19                                          // On this input, the 433Mhz-RF signal is received. LOW when no signal.
+#define TRANSCEIVER_RX_PIN      19    // Set the pin that receives data from your 433.42 Mhz Receiver
+#define TRANSCEIVER_MODE_PIN    15    // Aurel transceivers have a pin that let the hardware switch to RX and TX mode
+#define TRANSCEIVER_ENABLE_PIN  22    // Aurel transceivers have a pin that must be set to HIGH to enable the transmitter
+
+// DO NOT CHANGE THESE SETTINGS BELOW
+#define TRANSCEIVER_TX HIGH
+#define TRANSCEIVER_RX  LOW
 
 volatile long duration = 0;
 volatile long prev_time = 0;
 volatile boolean data_dispo = false;
-byte input = PIN_RF_RX_DATA;
+byte input = TRANSCEIVER_RX_PIN;
 String trame[3];
 byte message = 0;
 byte start = true;
@@ -14,14 +17,21 @@ byte intro = 0;
 String prefixe = "1100";
  
 void setup() {
-  Serial.begin(57600);
-  pinMode(PIN_RF_RX_DATA, INPUT);                                               // Initialise in/output ports
-  pinMode(PIN_RF_RX_VCC,  OUTPUT);                                              // Initialise in/output ports
-  pinMode(PIN_RF_TX_DATA, OUTPUT);                                              // Initialise in/output ports
-  pinMode(PIN_RF_TX_VCC,  OUTPUT);                                              // Initialise in/output ports
-  digitalWrite(PIN_RF_RX_VCC,HIGH);                                             // turn VCC to RF receiver ON
-  digitalWrite(PIN_RF_RX_DATA,INPUT_PULLUP);                                    // pull-up resister on (to prevent garbage)c
+  Serial.begin(115200);
+  // set the Aurel transceiver to RX mode
+  pinMode(TRANSCEIVER_MODE_PIN, OUTPUT);
+  digitalWrite(TRANSCEIVER_MODE_PIN, TRANSCEIVER_RX);
+
+  // enable Aurel transmitter
+  pinMode(TRANSCEIVER_ENABLE_PIN, OUTPUT);
+  digitalWrite(TRANSCEIVER_ENABLE_PIN, HIGH);
+
+  delay(500);
+
+  // assign an interrupt on pin x on state change
+  pinMode(TRANSCEIVER_RX_PIN, INPUT);
   attachInterrupt(digitalPinToInterrupt(input), declenche, CHANGE);
+  
   pinMode (LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
 }
