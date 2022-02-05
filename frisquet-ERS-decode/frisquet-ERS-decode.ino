@@ -6,6 +6,10 @@
 #define TRANSCEIVER_TX HIGH
 #define TRANSCEIVER_RX  LOW
 
+#define SERIAL_MONITOR  0x01
+#define RASPBERRY_PI    0x10  
+#define INTERFACE_MODE  RASPBERRY_PI
+
 volatile long duration = 0;
 volatile long prev_time = 0;
 volatile boolean data_dispo = false;
@@ -76,9 +80,10 @@ void loop() {
               String sortie_without_bitstuff = remove_bitstuff(sortie);
               sortie = sortie_without_bitstuff;
               String sortie_hex = convert_binary_string_to_hex_string(sortie);
+#if INTERFACE_MODE == SERIAL_MONITOR
               Serial.print("Trame reçue :");
               Serial.println(sortie_hex);
-
+#endif
               // repartition en bytes
               byte id1 = convert(sortie.substring(0,8)); // byte 3
               byte id2 = convert(sortie.substring(8,16)); // byte 4
@@ -87,6 +92,7 @@ void loop() {
               byte prechauff = convert(sortie.substring(56,64)); // byte 10 (pre-heated) 0=Reduit, 3=Confort, 4=Hors gel
               byte chauffage = convert(sortie.substring(64,72)); // Heating
               byte battery = convert(sortie.substring(72,80)); // Battery
+#if INTERFACE_MODE == SERIAL_MONITOR
               Serial.print("Message #");
               Serial.println(num);
               Serial.print("ID: ");
@@ -123,6 +129,26 @@ void loop() {
                 Serial.println("##########");
               else
                 Serial.println("----------");
+#elif INTERFACE_MODE == RASPBERRY_PI
+              // {ID;MODE;TEMP;BATT}
+              String msgSend = "";
+              msgSend = String(msgSend + id1 + "-" + id2 + "-" + id3);
+
+              prechauff &= 0x0F;
+              msgSend = String(msgSend + ";" + prechauff);
+
+              msgSend = String(msgSend + ";" + chauffage);
+
+              msgSend = String(msgSend + ";");
+              if (battery > 0)
+                msgSend = String(msgSend + "0");
+              else
+                msgSend = String(msgSend + "1");
+
+              Serial.println(msgSend);              
+#else
+    #error Wrong Serial Interface Configuration
+#endif
               intro = 0;
               digitalWrite(LED_BUILTIN, LOW);
             }
