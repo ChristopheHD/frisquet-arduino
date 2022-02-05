@@ -1,12 +1,17 @@
 #include <SerialTerminal.hpp>
 
-#define PIN_RF_TX_VCC               15                                          // +5 volt / Vcc power to the transmitter on this pin
-#define PIN_RF_TX_DATA              14                                          // Data to the 433Mhz transmitter on this pin
+#define TRANSCEIVER_TX_PIN      14
+#define TRANSCEIVER_MODE_PIN    15    // Aurel transceivers have a pin that let the hardware switch to RX and TX mode
+#define TRANSCEIVER_ENABLE_PIN  22    // Aurel transceivers have a pin that must be set to HIGH to enable the transmitter
+
+// DO NOT CHANGE THESE SETTINGS BELOW
+#define TRANSCEIVER_TX HIGH
+#define TRANSCEIVER_RX  LOW
 
 // Variables
-byte ERS_pin = PIN_RF_TX_DATA;
+byte ERS_pin = TRANSCEIVER_TX_PIN;
 int long_pulse = 825;
-byte message[17] = {0x00, 0x00, 0x00, 0x7E, 0xFF, 0xFF, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFD, 0x00, 0xFF, 0x80};
+byte message[17] = {0x00, 0x00, 0x00, 0x7E, 0x6A, 0xF4, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFD, 0x00, 0xFF, 0x80};
 byte old_state, num_byte;
 byte bitstuff = 0;
 maschinendeck::SerialTerminal* term;
@@ -108,17 +113,23 @@ void ERS_command(String opts) {
 }
 
 void setup() {
-  pinMode(PIN_RF_TX_DATA, OUTPUT);                                              // Initialise in/output ports
-  pinMode(PIN_RF_TX_VCC,  OUTPUT);                                              // Initialise in/output ports
-  digitalWrite(PIN_RF_TX_VCC,HIGH);                                             // turn VCC to RF transmitter ON
-  digitalWrite(ERS_pin, LOW);
+  // set the Aurel transceiver to RX mode
+  pinMode(TRANSCEIVER_MODE_PIN, OUTPUT);
+  digitalWrite(TRANSCEIVER_MODE_PIN, TRANSCEIVER_TX);
+
+  // enable Aurel transmitter
+  pinMode(TRANSCEIVER_ENABLE_PIN, OUTPUT);
+  digitalWrite(TRANSCEIVER_ENABLE_PIN, HIGH);
+
+  pinMode(TRANSCEIVER_TX_PIN, OUTPUT);
+  digitalWrite(TRANSCEIVER_TX_PIN, LOW);
+
   pinMode (LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
  
   term = new maschinendeck::SerialTerminal(57600);
   term->add("ERS", &ERS_command, "ERS mode heat\nmode : 0=Reduit, 3=Confort, 4=Hors gel\nheat : Température de chauffage entre 0 et 100");
 }
-
 
 void loop() {
  term->loop();
