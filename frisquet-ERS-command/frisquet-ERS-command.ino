@@ -113,8 +113,8 @@ void setup() {
   digitalWrite(PIN_RF_TX_VCC,HIGH);                                             // turn VCC to RF transmitter ON
   digitalWrite(ERS_pin, LOW);
   pinMode (LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
- 
+  digitalWrite(LED_BUILTIN, LOW);         // Sur ESP8266 inverser low et high
+  WiFi.mode(WIFI_OFF);                    // Désactive le WIFI sur ESP8266 et ESP32
   term = new maschinendeck::SerialTerminal(57600);
   term->add("ERS", &ERS_command, "ERS mode heat\nmode : 0=Reduit, 3=Confort, 4=Hors gel\nheat : Température de chauffage entre 0 et 100");
 }
