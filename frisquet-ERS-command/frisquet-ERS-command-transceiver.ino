@@ -124,8 +124,8 @@ void commande(byte mode, byte temperature) {
 
     // Emission de la trame
     // ********************
-    for (int i = 1; i <= 16; i++) { // boucle de 16 bytes
-      conversion(message[i]);
+    for (num_byte = 1; num_byte <= 16; num_byte++) { // boucle de 16 bytes
+      conversion(message[num_byte]); 
     }
     digitalWrite(TRANSCEIVER_TX_PIN, LOW);
     delay(33);
