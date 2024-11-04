@@ -48,7 +48,7 @@ jobs:
           - frisquet-ERS-decode/frisquet-ERS-decode-transceiver
           - frisquet-ERS-decode/frisquet-ERS-decode
         libraries: |
-          - name: SerialTerm
+          - name: SerialTerminal
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
