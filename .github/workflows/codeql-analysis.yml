@@ -38,17 +38,38 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Arduino compilation
+    - name: Arduino compilation command
       uses: arduino/compile-sketches@v1.1.2
       with:
         fqbn: arduino:avr:mega
         sketch-paths: |
           - frisquet-ERS-command/
-          - frisquet-ERS-decode/
         libraries: |
           - name: SerialTerminalPRO
-        cli-compile-flags: |
-          - "--clean"
+        enable-warnings-report: true
+
+    - name: Arduino compilation decode
+      uses: arduino/compile-sketches@v1.1.2
+      with:
+        fqbn: arduino:avr:mega
+        sketch-paths: |
+          - frisquet-ERS-decode/
+        enable-warnings-report: true
+
+    - name: Arduino compilation command transceiver
+      uses: arduino/compile-sketches@v1.1.2
+      with:
+        fqbn: arduino:avr:mega
+        sketch-paths: |
+          - frisquet-ERS-command-transceiver/
+        enable-warnings-report: true
+
+    - name: Arduino compilation decode transceiver
+      uses: arduino/compile-sketches@v1.1.2
+      with:
+        fqbn: arduino:avr:mega
+        sketch-paths: |
+          - frisquet-ERS-decode-transceiver/
         enable-warnings-report: true
 
     # Initializes the CodeQL tools for scanning.
