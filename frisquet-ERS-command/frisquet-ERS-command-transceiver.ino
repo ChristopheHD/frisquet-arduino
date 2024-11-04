@@ -66,7 +66,7 @@ void loop() {
       case 4:
         modeTexte="Hors Gel";break;
     }
-    if (temperature.toInt()>=10 and temperature.toInt()<=100) tempTexte="ok";
+    if (temperature.toInt()>=0 and temperature.toInt()<=100) tempTexte="ok";
     Serial.println("    Mode   --> " + mode + " - " + modeTexte );
     Serial.println("    T° eau --> " + temperature + "°C - " + tempTexte);
 
