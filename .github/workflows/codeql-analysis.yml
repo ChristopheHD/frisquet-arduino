@@ -43,10 +43,10 @@ jobs:
       with:
         fqbn: arduino:avr:mega
         sketch-paths: |
-          - frisquet-ERS-command/frisquet-ERS-command-transceiver
-          - frisquet-ERS-command/frisquet-ERS-command
-          - frisquet-ERS-decode/frisquet-ERS-decode-transceiver
-          - frisquet-ERS-decode/frisquet-ERS-decode
+          - frisquet-ERS-command/frisquet-ERS-command-transceiver.ino
+          - frisquet-ERS-command/frisquet-ERS-command.ino
+          - frisquet-ERS-decode/frisquet-ERS-decode-transceiver.ino
+          - frisquet-ERS-decode/frisquet-ERS-decode.ino
         libraries: |
           - name: SerialTerminal
 
