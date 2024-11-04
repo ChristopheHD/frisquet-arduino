@@ -30,9 +30,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'cpp', 'python' ]
-        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
-        # Learn more about CodeQL language support at https://git.io/codeql-language-support
+        include:
+          # Analyzes C and C++ code using the commands in `Build C and C++ code`
+          - language: cpp
+            build-mode: manual
+          - language: python
+            build-mode: none
 
     steps:
     - name: Checkout repository
@@ -43,9 +46,10 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        build-mode: manual
+        
     # Build
-    - name: Arduino compilation frisquet-ERS-command
+    - if: ${{ matrix.build-mode == 'manual' }}
+      name: Arduino compilation frisquet-ERS-command
       uses: arduino/compile-sketches@v1.1.2
       with:
         fqbn: arduino:avr:mega
@@ -55,7 +59,8 @@ jobs:
           - name: SerialTerminalPRO
         enable-warnings-report: true
 
-    - name: Arduino compilation frisquet-ERS-decode
+    - if: ${{ matrix.build-mode == 'manual' }}
+      name: Arduino compilation frisquet-ERS-decode
       uses: arduino/compile-sketches@v1.1.2
       with:
         fqbn: arduino:avr:mega
@@ -63,7 +68,8 @@ jobs:
           - frisquet-ERS-decode/
         enable-warnings-report: true
 
-    - name: Arduino compilation frisquet-ERS-command-transceiver
+    - if: ${{ matrix.build-mode == 'manual' }}
+      name: Arduino compilation frisquet-ERS-command-transceiver
       uses: arduino/compile-sketches@v1.1.2
       with:
         fqbn: arduino:avr:mega
@@ -71,7 +77,8 @@ jobs:
           - frisquet-ERS-command-transceiver/
         enable-warnings-report: true
 
-    - name: Arduino compilation frisquet-ERS-decode-transceiver
+    - if: ${{ matrix.build-mode == 'manual' }}
+      name: Arduino compilation frisquet-ERS-decode-transceiver
       uses: arduino/compile-sketches@v1.1.2
       with:
         fqbn: arduino:avr:mega
