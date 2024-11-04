@@ -38,6 +38,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: manual
+    # Build
     - name: Arduino compilation frisquet-ERS-command
       uses: arduino/compile-sketches@v1.1.2
       with:
@@ -72,12 +79,6 @@ jobs:
           - frisquet-ERS-decode-transceiver/
         enable-warnings-report: true
 
-    # Initializes the CodeQL tools for scanning.
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: ${{ matrix.language }}
-        build-mode: manual
-
+    # Analyze
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
