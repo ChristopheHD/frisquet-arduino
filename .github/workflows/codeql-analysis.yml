@@ -38,7 +38,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Arduino compilation command
+    - name: Arduino compilation frisquet-ERS-command
       uses: arduino/compile-sketches@v1.1.2
       with:
         fqbn: arduino:avr:mega
@@ -48,7 +48,7 @@ jobs:
           - name: SerialTerminalPRO
         enable-warnings-report: true
 
-    - name: Arduino compilation decode
+    - name: Arduino compilation frisquet-ERS-decode
       uses: arduino/compile-sketches@v1.1.2
       with:
         fqbn: arduino:avr:mega
@@ -56,7 +56,7 @@ jobs:
           - frisquet-ERS-decode/
         enable-warnings-report: true
 
-    - name: Arduino compilation command transceiver
+    - name: Arduino compilation frisquet-ERS-command-transceiver
       uses: arduino/compile-sketches@v1.1.2
       with:
         fqbn: arduino:avr:mega
@@ -64,7 +64,7 @@ jobs:
           - frisquet-ERS-command-transceiver/
         enable-warnings-report: true
 
-    - name: Arduino compilation decode transceiver
+    - name: Arduino compilation frisquet-ERS-decode-transceiver
       uses: arduino/compile-sketches@v1.1.2
       with:
         fqbn: arduino:avr:mega
