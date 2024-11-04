@@ -46,8 +46,8 @@ jobs:
           - frisquet-ERS-command/
           - frisquet-ERS-decode/
         libraries: |
-          - name: SerialTerminal
-        cli-compilte-flags: |
+          - name: SerialTerminalPRO
+        cli-compile-flags: |
           - "--clean"
         enable-warnings-report: true
 
